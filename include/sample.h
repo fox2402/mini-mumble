@@ -36,12 +36,12 @@ namespace sample
     //reference works like in c#, if you modify the ref, the original is
     //modified as well. Use it whenever you can.
       int a;
-      int& a;
-      int* a;
+      int& b;
+      int* c;
   };
   //Derived class is written this way
   class Sample2 : Sample
   {
 
-  }
+  };
 }
