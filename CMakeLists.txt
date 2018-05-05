@@ -28,4 +28,4 @@ set (TESTS
 add_executable(mini-mumble ${SRCS} ${MAIN} ${HDRS})
 
 #create a test executable
-add_executable(test_exe ${TESTS} ${HDRS} ${SRCS})
+add_executable(test_exe EXCLUDE_FROM_ALL ${TESTS} ${HDRS} ${SRCS})
