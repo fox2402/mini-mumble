@@ -36,6 +36,8 @@
 
 .idea/*
 cmake-build-debug/*
+Testing/*
+CTestTestfile.cmake
 
 CMakeCache.txt
 CMakeFiles/
