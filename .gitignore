@@ -44,3 +44,4 @@ cmake_install.cmake
 
 
 mini-mumble
+test_exe

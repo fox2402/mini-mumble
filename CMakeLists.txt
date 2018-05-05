@@ -16,5 +16,11 @@ set (SRCS
 set (HDRS
      include/sample.h)
 
+set (TESTS
+     tests/main_tests.cc)
+
 #create a rule to make
 add_executable(mini-mumble ${SRCS} ${HDRS})
+
+#create a test executable
+add_executable(test_exe ${TESTS} ${HDRS})
