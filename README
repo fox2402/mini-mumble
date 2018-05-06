@@ -1,1 +1,15 @@
 A small mumble like software with no GUI written in cpp.
+
+
+How to use:
+  cmake [DIR]
+  cd [DIR]
+  make
+  mini-mumble [OPTIONS]
+
+Options:
+  -s launch as a server, will require adress as well as port either as
+  options or with dynamic configuration. If not set, it will run as client
+
+  -p [PORT] set the port on which the server will listen, if -s is not set
+  or the port is not available, the server will fail to run
