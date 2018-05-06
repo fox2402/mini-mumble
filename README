@@ -23,3 +23,5 @@ Options:
 
   -m [PASSWORD] sets the password of the server or the password required to
   connect. If -s is not set, requires -a and -p.
+
+  -n prevent the program from running the interactive configuration
