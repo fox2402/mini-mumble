@@ -17,14 +17,17 @@ set (MAIN
      src/main.cc)
 
 #list all the source files except main
-set (SRCS )
+set (SRCS 
+     src/options.cc)
 
 #list all the headers files
 set (HDRS
-     include/sample.h)
+     include/sample.h
+     include/options.h)
 
 set (TESTS
-     tests/main_tests.cc)
+     tests/main_tests.cc
+     )
 
 #create a rule to make
 add_executable(mini-mumble ${SRCS} ${MAIN} ${HDRS})
