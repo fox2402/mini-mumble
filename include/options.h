@@ -5,8 +5,8 @@
 struct Options
 {
   Options();
-
-  bool                is_server;
-  int                 port;
-  std::string         addr;
+  Options(char** argv, int argc);
+  int                 is_server {-1};
+  int                 port      {-1};
+  std::string         addr      {"None"};
 };
