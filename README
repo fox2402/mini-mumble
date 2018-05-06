@@ -11,5 +11,15 @@ Options:
   -s launch as a server, will require adress as well as port either as
   options or with dynamic configuration. If not set, it will run as client
 
-  -p [PORT] set the port on which the server will listen, if -s is not set
-  or the port is not available, the server will fail to run
+  -p [PORT] sets the port on which the server will listen, if -s is set
+  and the port is not available, the server will fail to run. If -s is not set
+  it will be the port of the server on which you want to connect
+
+  -a [ADR] sets the adress of the server and will try to connect on this. If -s
+  is set, the option does nothing
+
+  -l [LOGIN] sets the login of the user, if -s is set, this option does nothing
+  if none is passed, the default login is "defaultuser"
+
+  -m [PASSWORD] sets the password of the server or the password required to
+  connect. If -s is not set, requires -a and -p.
