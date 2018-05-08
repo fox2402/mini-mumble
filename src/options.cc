@@ -5,7 +5,7 @@ Options::Options()
   //FIXME
 }
 
-Options::Options(int argc, char** argv)
+void Options::init(int argc, char** argv)
 {
   for(int i = 1; i < argc; i++)
   {

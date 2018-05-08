@@ -9,10 +9,10 @@
 
 int main(int argc, char** argv)
 {
-  struct Options o;
+  Options o;
   try
   {
-    struct Options o = Options(argc, argv);
+    o.init(argc, argv);
     std::cout << o;
   }
   catch(const std::invalid_argument& e)
@@ -22,7 +22,7 @@ int main(int argc, char** argv)
   }
   o.complete();
   std::cout << o;
-  if (o.server == 1)
+  if (o.is_server == 1)
   {
     try
     {
