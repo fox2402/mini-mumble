@@ -1,11 +1,13 @@
 #pragma once
 
-#include <string>
+#include<stdexcept>
+#include<iostream>
+#include<string>
 
 struct Options
 {
   Options();
-  Options(char** argv, int argc);
+  Options(int argc, char** argv);
   bool                silent    {false};
   int                 is_server {-1};
   int                 port      {-1};
