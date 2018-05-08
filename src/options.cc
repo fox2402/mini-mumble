@@ -54,6 +54,38 @@ Options::Options(int argc, char** argv)
   }
 }
 
+void Options::complete()
+{
+  while(port == -1)
+  {
+    std::cout << std::endl << "Enter port:" << std::endl;
+    try
+    {
+      std::string s;
+      std::cin >> s;
+      port = std::stoi(s);
+    }
+    catch(const std::invalid_argument& e)
+    {
+      std::cerr << "Invalid port number" << std::endl;
+    }
+  }
+  if(is_server == -1)
+  {
+    if(!addr.compare("None"))
+    {
+      std::cout << std::endl << "Enter address:" << std::endl;
+      std::cin >> addr; 
+    }
+    if(!login.compare("defaultuser"))
+    {
+      std::cout << std::endl << "Enter login:" << std::endl;
+      std::cin >> login; 
+    }
+  }
+  std::cout << std::endl;
+}
+
 std::ostream& operator<<(std::ostream& os, Options& o)
 {
   os << "Run as " << ((o.is_server == 1) ? "server" : "client") << std::endl
@@ -61,6 +93,6 @@ std::ostream& operator<<(std::ostream& os, Options& o)
     << "Address: " << o.addr << std::endl
     << "Login: " << o.login << std::endl
     << "Password: " << o.pass << std::endl
-    << ((o.silent) ? "silent" : "not silent") << std::endl;
+    << ((o.silent) ? "Silent" : "Not silent") << std::endl;
   return os;
 }

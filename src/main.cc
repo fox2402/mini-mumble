@@ -6,16 +6,18 @@
 
 int main(int argc, char** argv)
 {
+  struct Options o;
   try
   {
-    struct Options o = Options(argc, argv);
-    std::cout << o;
+    o = Options(argc, argv);
   }
   catch(const std::invalid_argument& e)
   {
     std::cerr << e.what() << std::endl;
     return -1;
   }
+  o.complete();
+  std::cout << o;
   return 0;
 
   /*

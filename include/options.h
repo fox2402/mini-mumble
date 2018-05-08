@@ -14,6 +14,7 @@ struct Options
   std::string         addr      {"None"};
   std::string         login     {"defaultuser"};
   std::string         pass      {""};
+  void complete();
 };
 
 std::ostream& operator<<(std::ostream& os, Options& o);
