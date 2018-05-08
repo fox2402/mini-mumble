@@ -15,7 +15,7 @@ class Server
     ~Server();  
 
   private:
-    void bind_socket(struct sockaddr_in* info);
+    void bind_socket(const Options& opt);
 
     std::vector<int>  clients_list;
     int               server_socket;
