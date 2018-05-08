@@ -18,12 +18,14 @@ set (MAIN
 
 #list all the source files except main
 set (SRCS 
-     src/options.cc)
+     src/options.cc
+     src/server.cc)
 
 #list all the headers files
 set (HDRS
      include/sample.h
-     include/options.h)
+     include/options.h
+     include/server.h)
 
 set (TESTS
      tests/main_tests.cc
