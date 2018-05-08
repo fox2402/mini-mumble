@@ -53,3 +53,14 @@ Options::Options(int argc, char** argv)
       throw std::invalid_argument(s.append(": invalid argument"));
   }
 }
+
+std::ostream& operator<<(std::ostream& os, Options& o)
+{
+  os << "Run as " << ((o.is_server == 1) ? "server" : "client") << std::endl
+    << "Port: " << o.port << std::endl
+    << "Address: " << o.addr << std::endl
+    << "Login: " << o.login << std::endl
+    << "Password: " << o.pass << std::endl
+    << ((o.silent) ? "silent" : "not silent") << std::endl;
+  return os;
+}

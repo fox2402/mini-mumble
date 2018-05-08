@@ -4,25 +4,12 @@
 #include "options.h"
 #include "sample.h"
 
-namespace
-{
-  void print_options(Options o)
-  {
-    std::cout << "Run as " << ((o.is_server == 1) ? "server" : "client") << std::endl;
-    std::cout << "Port: " << o.port << std::endl;
-    std::cout << "Address: " << o.addr << std::endl;
-    std::cout << "Login: " << o.login << std::endl;
-    std::cout << "Password: " << o.pass << std::endl;
-    std::cout << ((o.silent) ? "silent" : "not silent") << std::endl; 
-  }
-}
-
 int main(int argc, char** argv)
 {
   try
   {
     struct Options o = Options(argc, argv);
-    print_options(o);
+    std::cout << o;
   }
   catch(const std::invalid_argument& e)
   {

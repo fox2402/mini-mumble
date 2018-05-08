@@ -15,3 +15,5 @@ struct Options
   std::string         login     {"defaultuser"};
   std::string         pass      {""};
 };
+
+std::ostream& operator<<(std::ostream& os, Options& o);
