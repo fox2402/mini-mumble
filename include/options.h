@@ -11,7 +11,7 @@ struct Options
   bool                verbose   {false};
   bool                silent    {false};
   int                 is_server {-1};
-  int                 port      {-1};
+  std::string         port      {"None"};
   std::string         addr      {"None"};
   std::string         login     {"defaultuser"};
   std::string         pass      {""};

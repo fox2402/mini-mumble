@@ -16,14 +16,7 @@ void Options::init(int argc, char** argv)
     {
       if(i + 1 >= argc)
         throw std::invalid_argument("missing argument for -p");
-      try
-      {
-        port = std::stoi(argv[i + 1]);
-      }
-      catch(const std::invalid_argument& e)
-      {
-        throw std::invalid_argument("invalid argument for -p");
-      }
+      port = argv[i + 1];
       i++;
     }
     else if(!s.compare("-a"))
@@ -58,21 +51,11 @@ void Options::init(int argc, char** argv)
 
 void Options::complete()
 {
-  while(port == -1)
+  if(!port.compare("None"))
   {
     std::cout << "Enter port:" << std::endl;
-    try
-    {
-      std::string s;
-      std::cin >> s;
-      port = std::stoi(s);
-      std::cout << std::endl;
-    }
-    catch(const std::invalid_argument& e)
-    {
-      std::cerr << "Invalid port number" << std::endl;
-      std::cout << std::endl;
-    }
+    std::cin >> port;
+    std::cout << std::endl;
   }
   if(is_server == -1)
   {

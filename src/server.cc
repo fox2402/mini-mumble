@@ -34,14 +34,13 @@ Server::~Server()
 
 void Server::bind_socket(const Options& opt)
 {
-  (void) opt;
   struct addrinfo hints;
   struct addrinfo* result;
   struct addrinfo* rp;
   int sfd;
   init_hints(&hints);
 
-  int s = getaddrinfo(NULL, "4242", &hints, &result);
+  int s = getaddrinfo(NULL, opt.port.c_str(), &hints, &result);
   if (s != 0)
   {
     throw std::system_error(s, std::system_category(), "cannot retrieve addr");
