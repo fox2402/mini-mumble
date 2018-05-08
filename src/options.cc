@@ -49,6 +49,8 @@ Options::Options(int argc, char** argv)
     }
     else if(!s.compare("-n"))
       silent = true;
+    else if(!s.compare("-v"))
+      verbose = true;
     else
       throw std::invalid_argument(s.append(": invalid argument"));
   }
@@ -58,32 +60,35 @@ void Options::complete()
 {
   while(port == -1)
   {
-    std::cout << std::endl << "Enter port:" << std::endl;
+    std::cout << "Enter port:" << std::endl;
     try
     {
       std::string s;
       std::cin >> s;
       port = std::stoi(s);
+      std::cout << std::endl;
     }
     catch(const std::invalid_argument& e)
     {
       std::cerr << "Invalid port number" << std::endl;
+      std::cout << std::endl;
     }
   }
   if(is_server == -1)
   {
     if(!addr.compare("None"))
     {
-      std::cout << std::endl << "Enter address:" << std::endl;
+      std::cout << "Enter address:" << std::endl;
       std::cin >> addr; 
+      std::cout << std::endl;
     }
     if(!login.compare("defaultuser"))
     {
-      std::cout << std::endl << "Enter login:" << std::endl;
+      std::cout << "Enter login:" << std::endl;
       std::cin >> login; 
+      std::cout << std::endl;
     }
   }
-  std::cout << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, Options& o)
@@ -93,6 +98,7 @@ std::ostream& operator<<(std::ostream& os, Options& o)
     << "Address: " << o.addr << std::endl
     << "Login: " << o.login << std::endl
     << "Password: " << o.pass << std::endl
-    << ((o.silent) ? "Silent" : "Not silent") << std::endl;
+    << ((o.silent) ? "Silent" : "Not silent") << std::endl
+    << ((o.verbose) ? "Verbose" : "Non-verbose") << std::endl;
   return os;
 }

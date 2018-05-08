@@ -25,3 +25,5 @@ Options:
   connect. If -s is not set, requires -a and -p.
 
   -n prevent the program from running the interactive configuration
+
+  -v run the program in verbose mode

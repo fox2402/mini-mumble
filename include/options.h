@@ -8,6 +8,7 @@ struct Options
 {
   Options();
   Options(int argc, char** argv);
+  bool                verbose   {false};
   bool                silent    {false};
   int                 is_server {-1};
   int                 port      {-1};
