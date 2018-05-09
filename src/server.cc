@@ -7,13 +7,15 @@
 #include <unistd.h>
 #include <string.h>
 #include <netdb.h>
+#include <errno.h>
+
 namespace
 {
   void init_hints(struct addrinfo* hints)
   {
       memset(hints, 0, sizeof(struct addrinfo));
       hints->ai_family = AF_UNSPEC;
-      hints->ai_socktype = SOCK_DGRAM;
+      hints->ai_socktype = SOCK_STREAM;
       hints->ai_flags = AI_PASSIVE;
       hints->ai_protocol = 0;
       hints->ai_canonname = NULL;
@@ -45,7 +47,8 @@ void Server::bind_socket(const Options& opt)
   int s = getaddrinfo(NULL, opt.port.c_str(), &hints, &result);
   if (s != 0)
   {
-    throw std::system_error(s, std::system_category(), "cannot retrieve addr");
+    throw std::system_error(errno, std::system_category(), "cannot retrieve\
+addr");
   }
   for (rp = result; rp != NULL; rp = rp->ai_next)
   {
@@ -54,11 +57,13 @@ void Server::bind_socket(const Options& opt)
       continue;
     if (bind(sfd, rp->ai_addr, rp->ai_addrlen) == 0)
       break;
+    close(sfd);
   }
+  freeaddrinfo(result);
   if (rp == NULL)
   {
     throw std::system_error(0, std::system_category(), "Failed to find an\
-    addr");
+addr");
   }
   server_socket = sfd;
 
@@ -68,8 +73,8 @@ void Server::bind_socket(const Options& opt)
 void Server::begin_listen()
 {
   int i;
-  if ((i = listen(server_socket, 16)) == -1)
-    throw std::system_error(i, std::system_category(), "cannot listen");
+  if ((i = listen(server_socket, 50)) == -1)
+    throw std::system_error(errno, std::system_category(), "cannot listen");
   std::cout << "Listening..." << std::endl;
   int client = accept(server_socket, NULL, NULL);
   std::cout << "Accepted one client" << std::endl;
