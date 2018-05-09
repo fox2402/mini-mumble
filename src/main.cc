@@ -27,6 +27,7 @@ int main(int argc, char** argv)
     try
     {
       Server s(o);
+      s.begin_listen();
     }
     catch(const std::system_error& e)
     {

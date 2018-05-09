@@ -13,12 +13,15 @@ class Server
   public:
     Server(const Options& opt);
     ~Server();  
+    
+    void begin_listen();
 
   private:
     void bind_socket(const Options& opt);
 
     std::vector<int>  clients_list;
     int               server_socket;
+    char*             buffer;
 
 
 };

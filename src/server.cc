@@ -24,11 +24,13 @@ namespace
 
 Server::Server(const Options& opt)
 {
+  buffer = new char[1024];
   bind_socket(opt); 
 }
 
 Server::~Server()
 {
+  delete[] buffer;
   close(server_socket);
 }
 
@@ -63,3 +65,23 @@ void Server::bind_socket(const Options& opt)
   std::cout << "Socket is up and binded" << std::endl;
 }
 
+void Server::begin_listen()
+{
+  int i;
+  if ((i = listen(server_socket, 16)) == -1)
+    throw std::system_error(i, std::system_category(), "cannot listen");
+  std::cout << "Listening..." << std::endl;
+  int client = accept(server_socket, NULL, NULL);
+  std::cout << "Accepted one client" << std::endl;
+  while(true)
+  {
+    ssize_t i = read(client, buffer, 1024);
+    if (!i)
+    {
+      std::cout << "End of com, shutting down" << std::endl;
+      break;
+    }
+    i = write (client, "Server:", 7);
+    i = write (client, buffer, i);
+  }
+}
