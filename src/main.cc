@@ -5,6 +5,7 @@
 #include "options.h"
 #include "sample.h"
 #include "server.h"
+#include "client.h"
 
 
 int main(int argc, char** argv)
@@ -13,7 +14,6 @@ int main(int argc, char** argv)
   try
   {
     o.init(argc, argv);
-    std::cout << o;
   }
   catch(const std::invalid_argument& e)
   {
@@ -28,6 +28,18 @@ int main(int argc, char** argv)
     {
       Server s(o);
       s.begin_listen();
+    }
+    catch(const std::system_error& e)
+    {
+      std::cerr << e.what() << std::endl;
+      return -1;
+    }
+  }
+  else
+  {
+    try
+    {
+      Client c(o);
     }
     catch(const std::system_error& e)
     {
