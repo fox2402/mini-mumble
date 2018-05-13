@@ -14,8 +14,10 @@ class Client
   public:
     Client(const Options& opt);
     ~Client();  
+    void connect_to_server();
     
   private:
-    char*             buffer;
-    struct sockaddr_in addr;
+    char*               buffer;
+    struct sockaddr_in  serv_addr;
+    int                 sfd;
 };

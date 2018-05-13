@@ -40,6 +40,7 @@ int main(int argc, char** argv)
     try
     {
       Client c(o);
+      c.connect_to_server();
     }
     catch(const std::system_error& e)
     {
