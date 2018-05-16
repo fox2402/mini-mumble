@@ -27,3 +27,51 @@ Options:
   -n prevent the program from running the interactive configuration
 
   -v run the program in verbose mode
+
+
+Network Messages:
+messages between server and clients are regulated by some rules which are
+explained below.
+
+The message starts with 3 chars which represents the type of message followed
+by the bytes of the message itself. Packet size is max 2048
+
+  Client messages:
+    - CON [login] the connect message ask the server if the client can connect
+    the server can answer no if it is full, or ask for the passsword.
+
+    - PWD [pass] the password message send the password to the server and
+    request connection. If the password is correct the client is connected and
+    can start sending other messages.
+
+    - CHA [message] a simple chat message, should be send to all connected 
+    client
+
+    - VOI [bytes] a voice message, should work the same as CHA
+
+    - DCT inform the server that the client is disconnecting
+
+    - ACK confirm existence to the server
+  Server messages:
+    - ACK acknoledge message, used to confirm connection of a client
+    
+    - NOP refuses connection
+
+    - PWD request the client to send the password
+
+    - CHA [message] transfer of a text message
+
+    - VOI [bytes] transfer of a voice message
+
+    - CHK check if the client is still alive
+
+An exemple of exchange:
+
+C: CON aaa
+S: PWD
+C: PWD foobar
+S: ACK
+C: CHA Hello World
+S: CHK
+C: ACK
+C: DCT
