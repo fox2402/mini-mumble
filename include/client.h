@@ -15,6 +15,7 @@ class Client
     Client(const Options& opt);
     ~Client();  
     void connect_to_server();
+    void communicate();
     
   private:
     char*               buffer;

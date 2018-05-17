@@ -31,3 +31,20 @@ void Client::connect_to_server()
   if (connect(sfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
     throw std::system_error(0, std::system_category(), "Failed to connect to server");
 }
+
+void Client::communicate()
+{
+  while(true)
+  {
+    memset(buffer, 0, 1024);
+    std::string s;
+    std::cin >> s;
+    send(sfd, s.c_str(), strlen(s.c_str()), 0);
+    read(sfd, buffer, 1024);
+    for(size_t i = 0; i < strlen(buffer); i++)
+    {
+      std::cout << buffer[i];
+    }
+    std::cout << std::endl;
+  }
+}
