@@ -80,6 +80,7 @@ void Server::begin_listen()
   std::cout << "Accepted one client" << std::endl;
   while(true)
   {
+    memset(buffer, 0, 1024);
     ssize_t i = read(client, buffer, 1024);
     if (!i)
     {
