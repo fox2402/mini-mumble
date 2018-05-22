@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include <string>
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -22,9 +23,10 @@ class Server
     
     void manage_req();
 
+    
     std::vector<int>  clients_list;
     int               server_socket;
     char*             buffer;
-
+    std::string       password;
 
 };

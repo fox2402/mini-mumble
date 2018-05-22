@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <system_error>
-#include <string>
 
 #include <netinet/ip.h>
 #include <unistd.h>
@@ -28,7 +27,8 @@ namespace
 Server::Server(const Options& opt)
 {
   buffer = new char[1024];
-  bind_socket(opt); 
+  bind_socket(opt);
+  password = opt.pass;
 }
 
 Server::~Server()
