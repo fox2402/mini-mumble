@@ -90,13 +90,7 @@ void Server::begin_listen()
       std::cout << "End of com, shutting down" << std::endl;
       break;
     }
-    write (client, "Server:", 7);
-    ssize_t i = write (client, buffer, read_size);
-    if (i == EPIPE)
-    {
-      std::cout << "Client Lost" << std::endl;
-      close(client);
-    }
+    manage_req(client);
   }
 }
 
@@ -180,7 +174,7 @@ void Server::manage_PWD(int client)
       return;
     }
   }
-  write(client, "NOP", 3);
+  write_size = write(client, "NOP", 3);
 }
 
 void Server::manage_ACK(int client)

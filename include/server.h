@@ -35,7 +35,8 @@ class Server
     char*             buffer;
     std::string       password;
     ssize_t           read_size;
-    
+    ssize_t           write_size{0};
+
     bool              is_password{false};
 
 };
