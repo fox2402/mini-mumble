@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <system_error>
+#include <algorithm>
 
 #include <netinet/ip.h>
 #include <unistd.h>
@@ -146,38 +147,45 @@ void Server::manage_VOI(int client)
 {
   for (const int& cli : clients_list)
   {
-    if (cli != client && read_size > 3)
-      write(cli, buffer + 3, read_size - 3);
+    if (cli != client)
+      write(cli, buffer, read_size);
   }
-  return;
 }
 
 void Server::manage_CHA(int client)
 {
-  (void) client;
-  //FIXME
-  return;
+  for (const int& cli : clients_list)
+  {
+    if (cli != client)
+      write(cli, buffer, read_size);
+  } 
 }
 
 
 void Server::manage_DCT(int client)
 {
-  (void) client;
-  //FIXME
-  return;
+  close(client);
+  auto itr = std::find(clients_list.begin(), clients_list.end(), client);
+  clients_list.erase(itr);
 }
 
 void Server::manage_PWD(int client)
 {
-  (void) client;
-  //FIXME
-  return;
+  if (read_size > 3)
+  {
+    std::string str(buffer + 3, read_size - 3);
+    if (!str.compare(password))
+    {
+      write(client, "ACK", 3);
+      return;
+    }
+  }
+  write(client, "NOP", 3);
 }
 
 void Server::manage_ACK(int client)
 {
   (void) client;
-  //FIXME
   return;
 }
 
