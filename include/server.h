@@ -34,7 +34,8 @@ class Server
     int               server_socket;
     char*             buffer;
     std::string       password;
-
+    ssize_t           read_size;
+    
     bool              is_password{false};
 
 };

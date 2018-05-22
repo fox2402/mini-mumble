@@ -29,7 +29,7 @@ Server::Server(const Options& opt)
   buffer = new char[1024];
   bind_socket(opt);
   password = opt.pass;
-  is_password = password.length > 0;
+  is_password = password.length() > 0;
 }
 
 Server::~Server()
@@ -83,14 +83,19 @@ void Server::begin_listen()
   while(true)
   {
     memset(buffer, 0, 1024);
-    ssize_t i = read(client, buffer, 1024);
-    if (!i)
+    read_size = read(client, buffer, 1024);
+    if (!read_size)
     {
       std::cout << "End of com, shutting down" << std::endl;
       break;
     }
-    i = write (client, "Server:", 7);
-    i = write (client, buffer, i);
+    write (client, "Server:", 7);
+    ssize_t i = write (client, buffer, read_size);
+    if (i == EPIPE)
+    {
+      std::cout << "Client Lost" << std::endl;
+      close(client);
+    }
   }
 }
 
@@ -98,17 +103,35 @@ void Server::manage_req(int client)
 {
   std::string s(buffer, 3);
   if (!s.compare("CON"))
+  {
+    manage_CON(client);
     return;
+  }
   if (!s.compare("VOI"))
+  {
+    manage_VOI(client);
     return;
+  }
   if (!s.compare("CHA"))
+  {
+    manage_CHA(client);
     return;
-  if (!s.compare("DCT")
+  }
+  if (!s.compare("DCT"))
+  {
+    manage_DCT(client);
     return;
+  }
   if (!s.compare("PWD"))
+  {
+    manage_PWD(client);
     return;
-  if (!s.comapre("ACK"))
+  }
+  if (!s.compare("ACK"))
+  {
+    manage_ACK(client);
     return;
+  }
 }
 
 void Server::manage_CON(int client)
@@ -121,12 +144,17 @@ void Server::manage_CON(int client)
 
 void Server::manage_VOI(int client)
 {
-  //FIXME
+  for (const int& cli : clients_list)
+  {
+    if (cli != client && read_size > 3)
+      write(cli, buffer + 3, read_size - 3);
+  }
   return;
 }
 
 void Server::manage_CHA(int client)
 {
+  (void) client;
   //FIXME
   return;
 }
@@ -134,18 +162,21 @@ void Server::manage_CHA(int client)
 
 void Server::manage_DCT(int client)
 {
+  (void) client;
   //FIXME
   return;
 }
 
 void Server::manage_PWD(int client)
 {
+  (void) client;
   //FIXME
   return;
 }
 
 void Server::manage_ACK(int client)
 {
+  (void) client;
   //FIXME
   return;
 }
