@@ -20,13 +20,21 @@ class Server
     
   private:
     void bind_socket(const Options& opt);
+     
+    void manage_req(int client);
     
-    void manage_req();
-
+    void manage_CON(int client);
+    void manage_VOI(int client);
+    void manage_CHA(int client);
+    void manage_DCT(int client);
+    void manage_PWD(int client);
+    void manage_ACK(int client);
     
     std::vector<int>  clients_list;
     int               server_socket;
     char*             buffer;
     std::string       password;
+
+    bool              is_password{false};
 
 };

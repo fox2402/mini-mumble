@@ -29,6 +29,7 @@ Server::Server(const Options& opt)
   buffer = new char[1024];
   bind_socket(opt);
   password = opt.pass;
+  is_password = password.length > 0;
 }
 
 Server::~Server()
@@ -71,23 +72,6 @@ addr");
   std::cout << "Socket is up and binded" << std::endl;
 }
 
-void Server::manage_req()
-{
-  std::string s(buffer, 3);
-  if (!s.compare("CON"))
-    return;
-  if (!s.compare("VOI"))
-    return;
-  if (!s.compare("CHA"))
-    return;
-  if (!s.compare("DCT")
-    return;
-  if (!s.compare("PWD"))
-    return;
-  if (!s.comapre("ACK"))
-    return;
-}
-
 void Server::begin_listen()
 {
   int i;
@@ -109,3 +93,61 @@ void Server::begin_listen()
     i = write (client, buffer, i);
   }
 }
+
+void Server::manage_req(int client)
+{
+  std::string s(buffer, 3);
+  if (!s.compare("CON"))
+    return;
+  if (!s.compare("VOI"))
+    return;
+  if (!s.compare("CHA"))
+    return;
+  if (!s.compare("DCT")
+    return;
+  if (!s.compare("PWD"))
+    return;
+  if (!s.comapre("ACK"))
+    return;
+}
+
+void Server::manage_CON(int client)
+{
+  if (is_password)
+    write(client, "PWD", 3);
+  else
+    write(client, "ACK", 3);
+}
+
+void Server::manage_VOI(int client)
+{
+  //FIXME
+  return;
+}
+
+void Server::manage_CHA(int client)
+{
+  //FIXME
+  return;
+}
+
+
+void Server::manage_DCT(int client)
+{
+  //FIXME
+  return;
+}
+
+void Server::manage_PWD(int client)
+{
+  //FIXME
+  return;
+}
+
+void Server::manage_ACK(int client)
+{
+  //FIXME
+  return;
+}
+
+
