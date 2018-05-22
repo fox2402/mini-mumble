@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <system_error>
+#include <string>
 
 #include <netinet/ip.h>
 #include <unistd.h>
@@ -68,6 +69,23 @@ addr");
   server_socket = sfd;
 
   std::cout << "Socket is up and binded" << std::endl;
+}
+
+void Server::manage_req()
+{
+  std::string s(buffer, 3);
+  if (!s.compare("CON"))
+    return;
+  if (!s.compare("VOI"))
+    return;
+  if (!s.compare("CHA"))
+    return;
+  if (!s.compare("DCT")
+    return;
+  if (!s.compare("PWD"))
+    return;
+  if (!s.comapre("ACK"))
+    return;
 }
 
 void Server::begin_listen()

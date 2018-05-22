@@ -16,8 +16,11 @@ class Server
     
     void begin_listen();
 
+    
   private:
     void bind_socket(const Options& opt);
+    
+    void manage_req();
 
     std::vector<int>  clients_list;
     int               server_socket;
