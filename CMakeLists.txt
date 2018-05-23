@@ -3,6 +3,9 @@ project(mini-mumble)
 
 enable_testing()
 
+#package depency
+set(CMAKE_REQUIRED_LIBRARIES "libsfml-dev")
+
 #set the flags for g++
 set(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra -Werror -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g3")
