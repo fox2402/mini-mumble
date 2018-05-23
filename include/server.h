@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 
+#include <sys/epoll.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 
@@ -20,7 +21,9 @@ class Server
     
   private:
     void bind_socket(const Options& opt);
-     
+    
+    void server_loop();
+
     void manage_req(int client);
     
     void manage_CON(int client);
@@ -32,6 +35,8 @@ class Server
     
     std::vector<int>  clients_list;
     int               server_socket;
+    int               ep_socket;
+    
     char*             buffer;
     std::string       password;
     ssize_t           read_size;

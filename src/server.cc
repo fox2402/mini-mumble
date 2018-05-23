@@ -9,9 +9,11 @@
 #include <string.h>
 #include <netdb.h>
 #include <errno.h>
+#include <fcntl.h>
 
 namespace
 {
+  const int max_events = 50;
   void init_hints(struct addrinfo* hints)
   {
       memset(hints, 0, sizeof(struct addrinfo));
@@ -23,6 +25,16 @@ namespace
       hints->ai_addr = NULL;
       hints->ai_next = NULL;
   }
+
+  void setnonblocking(int fd)
+  {
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1)
+      throw std::system_error(errno, std::system_category());
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+      throw std::system_error(errno, std::system_category());
+  }
+
 }
 
 Server::Server(const Options& opt)
@@ -31,12 +43,18 @@ Server::Server(const Options& opt)
   bind_socket(opt);
   password = opt.pass;
   is_password = password.length() > 0;
+  ep_socket = epoll_create1(0);
+
+  if (ep_socket == -1)
+    throw std::system_error(errno, std::system_category());
+
 }
 
 Server::~Server()
 {
   delete[] buffer;
   close(server_socket);
+  close(ep_socket);
 }
 
 void Server::bind_socket(const Options& opt)
@@ -73,25 +91,60 @@ addr");
   std::cout << "Socket is up and binded" << std::endl;
 }
 
+void Server::server_loop()
+{
+  struct epoll_event events[max_events];
+  struct epoll_event ev;
+  for(;;)
+  {
+    int nfds = epoll_wait(ep_socket, events, max_events, -1);
+    if (nfds == -1)
+      throw std::system_error(errno, std::system_category());
+    for (int i = 0; i < nfds; i++)
+    {
+      if (events[i].data.fd == server_socket)
+      {
+        int client = accept(server_socket, NULL, NULL);
+        std::cout << "Accepted one client" << std::endl;
+        if (client == -1)
+          throw std::system_error(errno, std::system_category());
+        setnonblocking(client);
+        ev.events = EPOLLIN | EPOLLET;
+        ev.data.fd = client;
+        if (epoll_ctl(ep_socket, EPOLL_CTL_ADD, client, &ev) == -1)
+          throw std::system_error(errno, std::system_category(),
+            "can't add to epoll");
+      }
+      else
+      {
+          std::cout << "Reading one client" << std::endl;
+          read_size = read(events[i].data.fd, buffer, 1024);
+          std::cout << "Managing one client" << std::endl;
+          if (read_size == 0)
+          {
+            std::cout << "Lost one client" << std::endl;
+            if (epoll_ctl(ep_socket, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
+              throw std::system_error(errno, std::system_category(),
+              "can't add to epoll");
+          }
+          manage_req(events[i].data.fd);
+      }
+    }
+  }
+}
+
 void Server::begin_listen()
 {
   int i;
   if ((i = listen(server_socket, 50)) == -1)
     throw std::system_error(errno, std::system_category(), "cannot listen");
   std::cout << "Listening..." << std::endl;
-  int client = accept(server_socket, NULL, NULL);
-  std::cout << "Accepted one client" << std::endl;
-  while(true)
-  {
-    memset(buffer, 0, 1024);
-    read_size = read(client, buffer, 1024);
-    if (!read_size)
-    {
-      std::cout << "End of com, shutting down" << std::endl;
-      break;
-    }
-    manage_req(client);
-  }
+  struct epoll_event ev;
+  ev.events = EPOLLIN;
+  ev.data.fd = server_socket;
+  if (epoll_ctl(ep_socket, EPOLL_CTL_ADD, server_socket, &ev) == -1)
+    throw std::system_error(errno, std::system_category(), "can't add to epoll");
+  server_loop();
 }
 
 void Server::manage_req(int client)
