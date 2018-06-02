@@ -120,6 +120,8 @@ void Server::server_loop()
           std::cout << "Reading one client" << std::endl;
           read_size = read(events[i].data.fd, buffer, 1024);
           std::cout << "Managing one client" << std::endl;
+          std::cout << "Buffer: " << buffer << std::endl;
+          
           if (read_size == 0)
           {
             std::cout << "Lost one client" << std::endl;
@@ -130,6 +132,7 @@ void Server::server_loop()
           manage_req(events[i].data.fd);
       }
     }
+    memset(buffer, 0, 1024);
   }
 }
 
