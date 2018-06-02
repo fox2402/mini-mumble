@@ -15,10 +15,13 @@ class Client
     Client(const Options& opt);
     ~Client();  
     void connect_to_server();
+    void set_up();
     void communicate();
     
   private:
     char*               buffer;
     struct sockaddr_in  serv_addr;
     int                 sfd;
+    std::string         pass;
+    std::string         login;
 };

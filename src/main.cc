@@ -41,7 +41,7 @@ int main(int argc, char** argv)
     {
       Client c(o);
       c.connect_to_server();
-      c.communicate();
+      c.set_up();
     }
     catch(const std::system_error& e)
     {
