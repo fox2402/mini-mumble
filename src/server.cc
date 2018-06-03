@@ -127,7 +127,12 @@ void Server::server_loop()
             std::cout << "Lost one client" << std::endl;
             if (epoll_ctl(ep_socket, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
               throw std::system_error(errno, std::system_category(),
-              "can't add to epoll");
+              "can't del to epoll");
+            auto it = client_login_map.find(events[i].data.fd);
+            if (it != client_login_map.end())
+              client_login_map.erase(it);
+            close(events[i].data.fd);
+            continue;
           }
           manage_req(events[i].data.fd);
       }
