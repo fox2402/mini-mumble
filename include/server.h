@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdexcept>
 #include <string>
+#include <map>
 
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -20,6 +21,9 @@ class Server
 
     
   private:
+    bool check_valid_client(int socket);
+
+
     void bind_socket(const Options& opt);
     
     void server_loop();
@@ -33,6 +37,8 @@ class Server
     void manage_PWD(int client);
     void manage_ACK(int client);
     
+
+    std::map<int, std::pair<std::string, bool>> client_login_map;
     std::vector<int>  clients_list;
     int               server_socket;
     int               ep_socket;

@@ -158,6 +158,17 @@ void Server::manage_req(int client)
     manage_CON(client);
     return;
   }
+  if (!s.compare("PWD"))
+  {
+    manage_PWD(client);
+    return;
+  }
+  
+  if (!check_valid_client(client))
+  {
+    return;
+  }
+
   if (!s.compare("VOI"))
   {
     manage_VOI(client);
@@ -173,11 +184,6 @@ void Server::manage_req(int client)
     manage_DCT(client);
     return;
   }
-  if (!s.compare("PWD"))
-  {
-    manage_PWD(client);
-    return;
-  }
   if (!s.compare("ACK"))
   {
     manage_ACK(client);
@@ -185,12 +191,33 @@ void Server::manage_req(int client)
   }
 }
 
+
+bool Server::check_valid_client(int socket)
+{
+  auto it = client_login_map.find(socket);
+  if (it != client_login_map.end())
+  {
+    return std::get<1>(std::get<1>(*it));
+  }
+  return false;
+
+}
+
+
 void Server::manage_CON(int client)
 {
+  
+  client_login_map.emplace(std::make_pair(client, std::make_pair(
+  std::string(buffer).substr(0, 3),false)));
   if (is_password)
+  {
     write(client, "PWD", 3);
+  }
   else
+  {
+    std::get<1>(client_login_map[client]) = true;
     write(client, "ACK", 3);
+  }
 }
 
 void Server::manage_VOI(int client)
@@ -227,6 +254,7 @@ void Server::manage_PWD(int client)
     if (!str.compare(password))
     {
       write(client, "ACK", 3);
+      std::get<1>(client_login_map[client]) = true;
       return;
     }
   }
@@ -238,5 +266,3 @@ void Server::manage_ACK(int client)
   (void) client;
   return;
 }
-
-
