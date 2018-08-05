@@ -2,6 +2,8 @@ A small mumble like software with no GUI written in cpp.
 
 
 How to use:
+  cd [REPOGIT]
+  mkdir [DIR] (optional if DIR exists)
   cmake [DIR]
   cd [DIR]
   make
